@@ -81,7 +81,7 @@ export class FirstPersonController {
         const event = pointerInfo.event as MouseEvent;
         this.cameraRotationY -= event.movementX * 0.002;
         this.cameraRotationX -= event.movementY * 0.002;
-        this.cameraRotationX = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, this.cameraRotationX));
+        this.cameraRotationX = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, this.cameraRotationX));
       }
     });
 
@@ -155,9 +155,9 @@ export class FirstPersonController {
       -Math.cos(this.cameraRotationY)
     );
     const right = new Vector3(
-      Math.cos(this.cameraRotationY),
+      -Math.cos(this.cameraRotationY),
       0,
-      -Math.sin(this.cameraRotationY)
+      Math.sin(this.cameraRotationY)
     );
 
     let moveDir = new Vector3(0, 0, 0);
@@ -201,7 +201,7 @@ export class FirstPersonController {
       -Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX)
     );
 
-    (camera as any).setTarget(this.cameraPosition.add(lookDir));
+    (camera as any).setTarget(this.cameraPosition.add(lookDir.scale(10)));
   }
 
   resetPosition(): void {
