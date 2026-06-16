@@ -4,6 +4,7 @@ import {
   PointerEventTypes,
   PointerInfo,
   AbstractMesh,
+  FreeCamera,
 } from "@babylonjs/core";
 import type { FacilityInfo, FacilityMesh } from "./types";
 
@@ -160,7 +161,7 @@ export class FirstPersonController {
       Math.sin(this.cameraRotationY)
     );
 
-    let moveDir = new Vector3(0, 0, 0);
+    const moveDir = new Vector3(0, 0, 0);
 
     if (this.keys["KeyW"] || this.keys["ArrowUp"]) {
       moveDir.addInPlace(forward);
@@ -201,7 +202,7 @@ export class FirstPersonController {
       -Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX)
     );
 
-    (camera as any).setTarget(this.cameraPosition.add(lookDir.scale(10)));
+    (camera as FreeCamera).setTarget(this.cameraPosition.add(lookDir.scale(10)));
   }
 
   resetPosition(): void {

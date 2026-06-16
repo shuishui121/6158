@@ -16,6 +16,7 @@ import {
   EasingFunction,
 } from "@babylonjs/core";
 import type { FacilityInfo, FacilityMesh, TimeOfDay } from "./types";
+import { SpectatorManager } from "./SpectatorManager";
 
 export class StadiumSceneBuilder {
   private scene: Scene;
@@ -24,9 +25,11 @@ export class StadiumSceneBuilder {
   private nightLights: PointLight[] = [];
   private ground: GroundMesh | null = null;
   private stadiumWalls: Mesh[] = [];
+  private spectatorManager: SpectatorManager;
 
   constructor(scene: Scene) {
     this.scene = scene;
+    this.spectatorManager = new SpectatorManager(scene);
   }
 
   build(): FacilityMesh[] {
@@ -36,7 +39,12 @@ export class StadiumSceneBuilder {
     this.createAmbientDecorations();
     this.setupLighting();
     this.setTimeOfDay("day");
+    this.spectatorManager.setCount(30);
     return this.facilities;
+  }
+
+  getSpectatorManager(): SpectatorManager {
+    return this.spectatorManager;
   }
 
   private createGround(): void {
@@ -468,6 +476,8 @@ export class StadiumSceneBuilder {
 
   setTimeOfDay(time: TimeOfDay): void {
     if (!this.dayLights) return;
+
+    this.spectatorManager.setTimeOfDay(time);
 
     if (time === "day") {
       this.dayLights.hemi.intensity = 0.8;

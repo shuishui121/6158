@@ -9,15 +9,20 @@ export default function BabylonScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneManagerRef = useRef<SceneManager | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadProgress, setLoadProgress] = useState(100);
+  const [loadProgress] = useState(100);
   const [selectedFacility, setSelectedFacility] = useState<FacilityInfo | null>(null);
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>("day");
   const [isPointerLocked, setIsPointerLocked] = useState(false);
+  const [spectatorCount, setSpectatorCount] = useState(30);
+  const [maxSpectatorCount, setMaxSpectatorCount] = useState(50);
+  const [spectatorsVisible, setSpectatorsVisible] = useState(true);
 
   const handleTimeOfDayChange = useCallback((time: TimeOfDay) => {
     setTimeOfDay(time);
     if (sceneManagerRef.current) {
       sceneManagerRef.current.setTimeOfDay(time);
+      setMaxSpectatorCount(sceneManagerRef.current.getMaxSpectatorCount());
+      setSpectatorCount(sceneManagerRef.current.getSpectatorCount());
     }
   }, []);
 
@@ -41,6 +46,20 @@ export default function BabylonScene() {
 
   const handleCloseFacilityInfo = useCallback(() => {
     setSelectedFacility(null);
+  }, []);
+
+  const handleSpectatorCountChange = useCallback((count: number) => {
+    setSpectatorCount(count);
+    if (sceneManagerRef.current) {
+      sceneManagerRef.current.setSpectatorCount(count);
+    }
+  }, []);
+
+  const handleSpectatorsVisibleChange = useCallback((visible: boolean) => {
+    setSpectatorsVisible(visible);
+    if (sceneManagerRef.current) {
+      sceneManagerRef.current.setSpectatorsVisible(visible);
+    }
   }, []);
 
   useEffect(() => {
@@ -87,6 +106,11 @@ export default function BabylonScene() {
             onStartRoaming={handleStartRoaming}
             onResetPosition={handleResetPosition}
             onTeleportToHighJump={handleTeleportToHighJump}
+            spectatorCount={spectatorCount}
+            maxSpectatorCount={maxSpectatorCount}
+            onSpectatorCountChange={handleSpectatorCountChange}
+            spectatorsVisible={spectatorsVisible}
+            onSpectatorsVisibleChange={handleSpectatorsVisibleChange}
           />
 
           <FacilityInfoPanel

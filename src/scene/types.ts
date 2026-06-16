@@ -21,3 +21,19 @@ export interface SceneState {
   selectedFacility: FacilityInfo | null;
   isPointerLocked: boolean;
 }
+
+export type SpectatorState = "idle" | "walking" | "takingPhoto" | "talking";
+
+export interface SpectatorData {
+  id: number;
+  position: Vector3;
+  targetPosition: Vector3;
+  state: SpectatorState;
+  stateTimer: number;
+  nextStateTime: number;
+  rotation: number;
+  colorIndex: number;
+  walkSpeed: number;
+  avoidanceOffset: Vector3;
+  talkingPartnerId: number | null;
+}
